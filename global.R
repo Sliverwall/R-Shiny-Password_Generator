@@ -1,7 +1,6 @@
 #-------IMPORTS--------
 library(shiny)
 library(shinydashboard)
-library(shinyWidgets)
 library(dplyr)
 library(ggplot2)
 library(shinycssloaders)
@@ -12,3 +11,4 @@ source("functions.R")
 source("ui.R")
 source("server.R")
 source("load_app.R")
+

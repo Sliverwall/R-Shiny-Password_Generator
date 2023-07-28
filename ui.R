@@ -12,7 +12,8 @@ ui <- dashboardPage(
                icon = icon("database"))
     ),
     
-    get_Numofchar("tab1", "Number of Characters: ")
+    get_Numofchar("tab1", "Number of Characters: "),
+    get_Chartype("tab1", "Select Combo Boxes: ", SELECT_CHAR_TYPE)
     
   ),
   dashboardBody(
