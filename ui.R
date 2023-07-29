@@ -17,6 +17,15 @@ ui <- dashboardPage(
     
   ),
   dashboardBody(
+    tabItems(
+      tabItem(tabName = "tab1",
+              h2("Welcome to the Landing Page!"),
+    
+    fluidRow(
+      column(6, verbatimTextOutput("check_password"))
+    )
+      )
+    )
     
     
   )
