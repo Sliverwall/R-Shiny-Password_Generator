@@ -1,10 +1,6 @@
 
 #-------------General Functions------------]
 
-
-
-
-
 #-------------tag Functions--------------------
 
 gitHub_Link <- function(github_url, px_position){
@@ -16,6 +12,7 @@ tags$li(
   class = "dropdown"
 )
 }
+
 
 
 #-------------Side_Bar Widgets------------
@@ -35,50 +32,83 @@ get_Chartype <- function(tab_name, widget_name, select_opt){
   )
 }
 
+get_Refresh <- function(tab_name){
+  
+  sidebarMenu(
+    id = tab_name,
+    actionButton("refreshButton", label = "Refresh", class = "refresh-button")
+  )
+}
+
 
 
 
 
 #------------Server Help Functions-------------
 
+set_PasswordChars <- function(combo_boxes){
+  
+  # initialize blank password list
+  
+  password_string <- ""
+  
+  # Check the check boxes
+  USE_UPPER <- search_Combo_Boxes(combo_boxes, "Uppercase")
+  USE_LOWER <- search_Combo_Boxes(combo_boxes, "Lowercase")
+  USE_DIGITS <- search_Combo_Boxes(combo_boxes, "Digits")
+  USE_SYMBOL <- search_Combo_Boxes(combo_boxes, "Symbols (!@#$...)")
+  
+  
+  # Append the corresponding character sets
+  if (USE_UPPER) {
+    password_string <- base::paste(password_string, UPPER_CASE_LETTERS)
+  }
+  
+  if (USE_LOWER) {
+    password_string <- base::paste(password_string, LOWER_CASE_LETTERS)
+  }
+  
+  if (USE_DIGITS) {
+    password_string <- base::paste(password_string, DIGITS)
+  }
+  
+  if (USE_SYMBOL) {
+    password_string <- base::paste(password_string, SYMBOL_CHAR)
+  }
+  
+  # Remove empty strings
+  password_string <- base::gsub(" ", "", password_string)
+  
+  return(password_string)
+}
+
+
 
 
 #------------Generate Password Functions---------
 
 
-gen_Password <- function(numOfChar){
-  
- password_para <- set_PasswordLimit()
+gen_Password <- function(password_para, numOfChar, initalize_var){
  
- 
- result <- base::sample(password_para, size = numOfChar, replace = TRUE)
+ result <- base::sample(password_para, size = numOfChar, replace = FALSE)
  
  return(result)
   
 }
 
 
-set_PasswordLimit <- function(){
+search_Combo_Boxes <- function(combo_boxes, search_con){
   
-  password_limit <- base::paste0(UPPER_CASE_LETTERS,
-                                 LOWER_CASE_LETTERS,
-                                 DIGITS,
-                                 SYMBOL_CHAR)
-  return(password_limit)
-}
+  result <- search_con %in% combo_boxes
 
-search_Combo_Boxes <- function(combo_boxes){
-  
-  uppercase <- "Uppercase" %in% combo_boxes
-  lowercase <- "Lowercase" %in% combo_boxes
-  digits <- "Digits" %in% combo_boxes
-  
-  
+  return(result)
   
 }
 
 
-SELECT_CHAR_TYPE <- c("Uppercase", "Lowercase", "Digits", "Symbols (!@#$...)")
+
+
+
 
 
 

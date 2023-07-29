@@ -3,13 +3,6 @@
 
 #---------------CONSTANTS-------------
 
-### Set up bools for char types
-USE_UPPER <- TRUE
-USE_LOWER <- TRUE
-USE_DIGITS <- TRUE
-USE_SYMBOL <- TRUE
-
-
 ### store strings for potential items in password
 
 UPPER_CASE_LETTERS <- "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
