@@ -85,6 +85,19 @@ set_PasswordChars <- function(combo_boxes){
 
 
 
+find_CSV_Column <- function(input_file, input_id,session_init){
+  
+  
+  col_name <- reactive({
+    colnames(input_file)
+  })
+  
+  observe({
+    updateSelectInput(session_init, inputId = input_id, choices = c("", col_name()))
+  })
+}
+
+
 #------------Generate Password Functions---------
 
 

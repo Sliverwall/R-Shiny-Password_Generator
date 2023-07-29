@@ -13,7 +13,7 @@ server <- function(input, output, session) {
   output$rawData_table <- renderDT({
     
     # Generate table for imported CSV
-    get_Datatable(rawData(), 10)
+    get_Datatable(rawData(), 5)
     
   })
   
@@ -54,6 +54,13 @@ server <- function(input, output, session) {
       "password123"
     }
   })
+  
+  
+  # Observe statements finding unique column names within imported csv file
+  find_CSV_Column(rawData(),"website_col", session)
+  find_CSV_Column(rawData(),"username_col", session)
+  find_CSV_Column(rawData(),"comment_col", session)
+  find_CSV_Column(rawData(),"password_col", session)
 
     
   }

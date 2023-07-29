@@ -52,11 +52,14 @@ ui <- dashboardPage(
                status = "info",
                solidHeader = TRUE,
                collapsible = TRUE,
-               width = 12,
-               textInput("website_cite", "Website", value = ""),
-               textInput("username_cite", "Username", value = ""),
-               textInput("comment_cite", "Comments", value = ""),
+               width = 6,
+              fluidRow(
+                  column(width = 4,
+                     textInput("website_cite", "Website", value = ""),
+                     textInput("username_cite", "Username", value = ""),
+                     textInput("comment_cite", "Comments", value = ""),
              )
+              ))
       ),
     )
       )
