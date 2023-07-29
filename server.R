@@ -1,10 +1,25 @@
 #----------SERVER----------------
 server <- function(input, output, session) {
   
+  rawData <- reactive({
+    
+    # Reactive object for imported CSV
+    
+    req(input$file_upload)
+    read.csv(input$file_upload$datapath)
+    
+  })
   
+  output$rawData_table <- renderDT({
+    
+    # Generate table for imported CSV
+    get_Datatable(rawData(), 10)
+    
+  })
   
   password_source <- reactive({
     
+    # Use selected combo boxes to form string with all possible characters
     combo_boxes <- input$combo_boxes
     
     set_PasswordChars(combo_boxes)

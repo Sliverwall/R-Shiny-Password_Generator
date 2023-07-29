@@ -1,8 +1,8 @@
 #-------IMPORTS--------
 library(shiny)
 library(shinydashboard)
+library(DT)
 library(dplyr)
-library(ggplot2)
 library(shinycssloaders)
 
 #---------SOURCES------------

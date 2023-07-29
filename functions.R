@@ -107,6 +107,27 @@ search_Combo_Boxes <- function(combo_boxes, search_con){
 
 
 
+#-------------Data Table Functions-----------
+get_Datatable <- function(df, page_len){
+DT::datatable(df, options = list(
+  pageLength = page_len,
+  rownames = FALSE,
+  paging = TRUE,
+  searching = TRUE,
+  scrollX = TRUE,
+  buttons = list("copy"),  # Enable Copy button
+  rowCallback = JS(  # Alternating row colors
+    "function(row, data, index) {",
+    "  if (index % 2 === 0) {",
+    "    $('td', row).css('background-color', '#f2f2f2');",
+    "  }",
+    "}"
+  )
+))
+
+}
+
+
 
 
 
