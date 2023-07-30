@@ -137,8 +137,59 @@ DT::datatable(df, options = list(
     "}"
   )
 ))
-
 }
+
+get_Datatable_W <- function(df, page_len) {
+  DT::datatable(df, options = list(
+    pageLength = page_len,
+    rownames = FALSE,
+    paging = TRUE,
+    searching = TRUE,
+    scrollX = TRUE,
+    buttons = list("copy"),  # Enable Copy button
+    rowCallback = JS(  # Alternating row colors
+    "function(row, data, index) {",
+    "  if (index >= 0) {",
+    "    $('td', row).css('background-color', '#FFFFFF');",
+    "  }",
+    "}"
+  ),
+  # Add CSS styles to the table
+  callback = JS(
+    "$(document).ready(function() {",
+    "  $('table.dataTable').css('border-collapse', 'collapse');",
+    "  $('table.dataTable th, table.dataTable td').css('border', '1px solid black');",
+    "  $('table.dataTable').css('border', '2px solid black');",
+    "  $('table.dataTable th').css('background-color', '#FFFFFF');",  # Set column header background color
+    "});"
+  )
+  )) 
+}
+
+
+
+
+#----------------API Functions-------------------
+# Function to fetch GitHub commits and extract required information
+get_Github_Commits <- function(owner, repo, token) {
+  url <- paste0("https://api.github.com/repos/", owner, "/", repo, "/commits")
+  response <- httr::GET(url, httr::add_headers(Authorization = paste("Bearer", token)))
+  commits <- httr::content(response)
+  
+  # Extract only the required information: unique ID, commit title, and description
+  commit_info <- lapply(commits, function(commit) {
+    list(
+      id = commit$sha,
+      title = commit$commit$message,
+      description = commit$commit$message
+    )
+  })
+  
+  return(commit_info)
+}
+
+
+
 
 
 

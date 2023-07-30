@@ -15,13 +15,18 @@ ui <- dashboardPage(
     
     get_Numofchar("tab1", "Number of Characters: "),
     get_Chartype("tab1", "Include: ", SELECT_CHAR_TYPE),
-    get_Refresh("tab1")
+    get_Refresh("tab1"),
+    
+    sidebarMenu(
+      menuItem("Change Log", tabname = "tab2",
+                icon = icon("github"),
+      menuSubItem(tabName = "tab2", "Commits")))
     
   ),
   dashboardBody(
     tabItems(
       tabItem(tabName = "tab1",
-              h2("Welcome to the Landing Page!"),
+              h2(LANDING_PAGE_TITLE),
     
     fluidRow(
       column(width = 7,
@@ -62,7 +67,15 @@ ui <- dashboardPage(
               ))
       ),
     )
-      )
+      ),
+    
+    tabItem(tabName = "tab2",
+            fluidPage(
+              # Other UI elements (if any) go here
+              
+              # Output to display commits
+              DT::dataTableOutput("commit_output")
+            ))
     ) 
   )
 )

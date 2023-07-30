@@ -56,12 +56,31 @@ server <- function(input, output, session) {
   })
   
   
-  # Observe statements finding unique column names within imported csv file
+  # Set observe statements finding unique column names within imported csv file
   find_CSV_Column(rawData(),"website_col", session)
   find_CSV_Column(rawData(),"username_col", session)
   find_CSV_Column(rawData(),"comment_col", session)
   find_CSV_Column(rawData(),"password_col", session)
 
-    
-  }
 
+  # Define commit_info as a reactive object
+  commit_info <- reactive({
+    get_github_commits(owner, repo, github_token)
+  })
+  
+  # Render commit information in a DT table
+  output$commit_output <- renderDT({
+    info <- commit_info()
+    if (is.null(info) || length(info) == 0) {
+      return(NULL)
+    } else {
+      df <- data.frame(
+        id = sapply(info, function(x) x[["id"]]),
+        title = sapply(info, function(x) x[["title"]]),
+        description = sapply(info, function(x) x[["description"]])
+      )
+      return(get_Datatable_W(df,5))
+    }
+  })
+
+}
