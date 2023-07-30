@@ -180,8 +180,9 @@ get_Github_Commits <- function(owner, repo, token) {
   commit_info <- lapply(commits, function(commit) {
     list(
       id = commit$sha,
-      title = commit$commit$message,
-      description = commit$commit$message
+      title = commit$commit$author$name,  # Corrected field name for commit title
+      description = commit$commit$message,  # Corrected field name for commit description
+      author = commit$commit$author$name  # Author of the commit
     )
   })
   

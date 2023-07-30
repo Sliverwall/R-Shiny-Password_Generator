@@ -71,16 +71,23 @@ server <- function(input, output, session) {
   # Render commit information in a DT table
   output$commit_output <- renderDT({
     info <- commit_info()
-    if (is.null(info) || length(info) == 0) {
-      return(NULL)
-    } else {
-      df <- data.frame(
-        id = sapply(info, function(x) x[["id"]]),
-        title = sapply(info, function(x) x[["title"]]),
-        description = sapply(info, function(x) x[["description"]])
-      )
-      return(get_Datatable_W(df,5))
-    }
-  })
+      if (is.null(info) || length(info) == 0) {
+        return(NULL)
+      } else {
+        df <- data.frame(
+          id = sapply(info, function(x) x$id),
+          title = sapply(info, function(x) {
+            words <- strsplit(x$title, " ")[[1]]
+            paste(words[1:2], collapse = " ")  # First 2 words as title
+          }),
+          description = sapply(info, function(x) {
+            words <- strsplit(x$description, " ")[[1]]
+            paste(words[3:length(words)], collapse = " ")  # 3rd word and beyond as description
+          })
+        )
+        return(get_Datatable_W(df, 5))
+      }
+    })
+  
 
 }
