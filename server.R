@@ -4,16 +4,21 @@ server <- function(input, output, session) {
   rawData <- reactive({
     
     # Reactive object for imported CSV
-    
-    req(input$file_upload)
+  blankdf <- get_Blank_CSV()
+  
+  
+    if(!is.null(input$file_upload)){
     read.csv(input$file_upload$datapath)
+    } else {
+      blankdf
+    }
     
   })
   
   output$rawData_table <- renderDT({
     
     # Generate table for imported CSV
-    get_Datatable(rawData(), 5)
+    get_Datatable_W(rawData(), 5)
     
   })
   
@@ -57,15 +62,15 @@ server <- function(input, output, session) {
   
   
   # Set observe statements finding unique column names within imported csv file
-  find_CSV_Column(rawData(),"website_col", session)
-  find_CSV_Column(rawData(),"username_col", session)
-  find_CSV_Column(rawData(),"comment_col", session)
-  find_CSV_Column(rawData(),"password_col", session)
+  find_CSV_Column(rawData(),"website_col", session, "Website")
+  find_CSV_Column(rawData(),"username_col", session, "Username")
+  find_CSV_Column(rawData(),"comment_col", session, "Comments")
+  find_CSV_Column(rawData(),"password_col", session, "Password")
 
 
   # Define commit_info as a reactive object
   commit_info <- reactive({
-    get_github_commits(owner, repo, github_token)
+    get_Github_Commits(owner, repo, github_token)
   })
   
   # Render commit information in a DT table
@@ -83,9 +88,10 @@ server <- function(input, output, session) {
           description = sapply(info, function(x) {
             words <- strsplit(x$description, " ")[[1]]
             paste(words[3:length(words)], collapse = " ")  # 3rd word and beyond as description
-          })
+          }),
+          author = sapply(info, function(x) x$author)
         )
-        return(get_Datatable_W(df, 5))
+        return(get_Datatable_W(df, 50))
       }
     })
   

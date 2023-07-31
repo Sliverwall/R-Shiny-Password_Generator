@@ -85,7 +85,7 @@ set_PasswordChars <- function(combo_boxes){
 
 
 
-find_CSV_Column <- function(input_file, input_id,session_init){
+find_CSV_Column <- function(input_file, input_id,  session_init, choice_int = ""){
   
   
   col_name <- reactive({
@@ -93,8 +93,21 @@ find_CSV_Column <- function(input_file, input_id,session_init){
   })
   
   observe({
-    updateSelectInput(session_init, inputId = input_id, choices = c("", col_name()))
+    updateSelectInput(session_init, inputId = input_id, choices = c(choice_int, col_name()))
   })
+}
+
+get_Blank_CSV <- function(){
+  df <- data.frame(
+    Website = character(),  # Empty character vector for Website
+    Username = character(),  # Empty character vector for Username
+    Comments = character(),  # Empty character vector for Comments
+    Password = character(),  # Empty character vector for Password
+    stringsAsFactors = FALSE  # Prevent string columns from being converted to factors
+  )
+  
+  return(df)
+  
 }
 
 
@@ -128,6 +141,7 @@ DT::datatable(df, options = list(
   paging = TRUE,
   searching = TRUE,
   scrollX = TRUE,
+  dom = 'Blfrtip',  # Add the buttons to the DOM
   buttons = list("copy"),  # Enable Copy button
   rowCallback = JS(  # Alternating row colors
     "function(row, data, index) {",
@@ -140,30 +154,42 @@ DT::datatable(df, options = list(
 }
 
 get_Datatable_W <- function(df, page_len) {
-  DT::datatable(df, options = list(
+  DT::datatable(df, extensions = 'Buttons', options = list(
     pageLength = page_len,
-    rownames = FALSE,
+    rownames = FALSE,  # Remove the index column
     paging = TRUE,
     searching = TRUE,
     scrollX = TRUE,
-    buttons = list("copy"),  # Enable Copy button
+    columnDefs = list(list(targets = 0, visible = FALSE)),  # Hide the first column
+    # Add CSS styles to the table
+    dom = 'Blfrtip',  # Add the buttons to the DOM
+    buttons = list(
+      'copy',  # Enable Copy button
+      'csv',   # Enable Export to CSV button
+      'excel', # Enable Export to Excel button
+      'pdf'    # Enable Export to PDF button
+    ),
     rowCallback = JS(  # Alternating row colors
-    "function(row, data, index) {",
-    "  if (index >= 0) {",
-    "    $('td', row).css('background-color', '#FFFFFF');",
-    "  }",
-    "}"
-  ),
-  # Add CSS styles to the table
-  callback = JS(
-    "$(document).ready(function() {",
-    "  $('table.dataTable').css('border-collapse', 'collapse');",
-    "  $('table.dataTable th, table.dataTable td').css('border', '1px solid black');",
-    "  $('table.dataTable').css('border', '2px solid black');",
-    "  $('table.dataTable th').css('background-color', '#FFFFFF');",  # Set column header background color
-    "});"
-  )
-  )) 
+      "function(row, data, index) {",
+      "  if (index >= 0) {",
+      "    $('td', row).css('background-color', '#FFFFFF');",
+      "    $('td', row).css('text-align', 'center');  // Center align the row values",
+      "  }",
+      "}"
+    ),
+    # Add CSS styles to the table
+    callback = JS(
+      "$(document).ready(function() {",
+      "  $('table.dataTable').css('border-collapse', 'collapse');",
+      "  $('table.dataTable th, table.dataTable td').css('border', '1px solid black');",
+      "  $('table.dataTable').css('border', '2px solid black');",
+      "  $('table.dataTable th').css({",
+      "    'background-color': '#FFFFFF',",  # Set column header background color
+      "    'text-align': 'center'  // Center align the column header text",
+      "  });",
+      "});"
+    )
+  ))
 }
 
 
@@ -180,7 +206,7 @@ get_Github_Commits <- function(owner, repo, token) {
   commit_info <- lapply(commits, function(commit) {
     list(
       id = commit$sha,
-      title = commit$commit$author$name,  # Corrected field name for commit title
+      title = commit$commit$message,  # Corrected field name for commit title
       description = commit$commit$message,  # Corrected field name for commit description
       author = commit$commit$author$name  # Author of the commit
     )

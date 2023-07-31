@@ -31,7 +31,7 @@ ui <- dashboardPage(
     fluidRow(
       column(width = 7,
              box(
-               title = "Import CSV to append new password",
+               title = "Import CSV or Use Blank Template",
                status = "info",
                solidHeader = TRUE,
                collapsible = TRUE,
