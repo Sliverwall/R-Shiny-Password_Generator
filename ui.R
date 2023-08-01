@@ -48,7 +48,7 @@ ui <- dashboardPage(
                column( width = 6,
                        offset = 4,
                        style = "margin-top: -400px;",
-                       DT::dataTableOutput('rawData_table'))
+                       shinycssloaders::withSpinner(DT::dataTableOutput('rawData_table')))
              )
              
              ),
@@ -57,12 +57,16 @@ ui <- dashboardPage(
                status = "info",
                solidHeader = TRUE,
                collapsible = TRUE,
-               width = 6,
+               width = 7,
               fluidRow(
                   column(width = 4,
                      textInput("website_cite", "Website", value = ""),
-                     textInput("username_cite", "Username", value = ""),
+                     textInput("username_cite", "Username", value = "")),
+                  column(width = 5,
+                         offset = 4,
+                         style = "margin-top: -145px;",
                      textInput("comment_cite", "Comments", value = ""),
+                     textInput("password_cite", "Password", value = "")
              )
               ))
       ),

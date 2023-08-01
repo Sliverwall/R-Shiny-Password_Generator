@@ -33,7 +33,7 @@ server <- function(input, output, session) {
 
   ### Check password output
   
-  output$check_password <- renderPrint({
+  password_made <- reactive({
     
     # Check if no combo_boxes selected
     if(password_source() != ""){
@@ -62,11 +62,46 @@ server <- function(input, output, session) {
   
   
   # Set observe statements finding unique column names within imported csv file
-  find_CSV_Column(rawData(),"website_col", session, "Website")
-  find_CSV_Column(rawData(),"username_col", session, "Username")
-  find_CSV_Column(rawData(),"comment_col", session, "Comments")
-  find_CSV_Column(rawData(),"password_col", session, "Password")
+  
+  website_col_name <- reactive({
+    colnames(rawData())
+  })
+  
+  observe({
+    updateSelectInput(session, inputId = "website_col", choices = c("Website", website_col_name()))
+  })
+  
+  username_col_name <- reactive({
+    colnames(rawData())
+  })
+  
+  observe({
+    updateSelectInput(session, inputId = "username_col", choices = c("Username", username_col_name()))
+  })
+  
+  comments_col_name <- reactive({
+    colnames(rawData())
+  })
+  
+  observe({
+    updateSelectInput(session, inputId = "comment_col", choices = c("Comments", comments_col_name()))
+  })
+  
+  password_col_name <- reactive({
+    colnames(rawData())
+  })
+  
+  observe({
+    updateSelectInput(session, inputId = "password_col", choices = c("Password", password_col_name()))
+  })
 
+  
+  
+  # Set observer to send generated password to update text output
+  observe({
+  updateTextInput(session, "password_cite", value = password_made())
+  })
+    
 
   # Define commit_info as a reactive object
   commit_info <- reactive({
