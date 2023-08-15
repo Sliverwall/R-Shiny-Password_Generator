@@ -15,7 +15,9 @@ ui <- dashboardPage(
     
     get_Numofchar("tab1", "Number of Characters: "),
     get_Chartype("tab1", "Include: ", SELECT_CHAR_TYPE),
-    get_Refresh("tab1"),
+    get_Button("tab1", "refreshButton", "Refresh"),
+    get_Button("tab1","appendButton","Append Table"),
+    get_Button("tab1","writeButton","Write CSV"),
     
     sidebarMenu(
       menuItem("Change Log", tabname = "tab2",
@@ -42,7 +44,9 @@ ui <- dashboardPage(
                        selectInput("website_col", "Website", choices = NULL),
                        selectInput("username_col", "Username", choices = NULL),
                        selectInput("comment_col", "Comments", choices = NULL),
-                       selectInput("password_col", "Password", choices = NULL)
+                       selectInput("password_col", "Password", choices = NULL),
+                       textInput("fileNameSelect", "CSV File Name", value = ""),
+                       textInput("filePathSelect", "CSV File Path", value = "")
              )),
              fluidRow(
                column( width = 6,

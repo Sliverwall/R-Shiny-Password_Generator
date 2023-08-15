@@ -32,15 +32,13 @@ get_Chartype <- function(tab_name, widget_name, select_opt){
   )
 }
 
-get_Refresh <- function(tab_name){
+get_Button <- function(tab_name,id,label){
   
   sidebarMenu(
     id = tab_name,
-    actionButton("refreshButton", label = "Refresh", class = "refresh-button")
+    actionButton(id, label = label, class = "refresh-button")
   )
 }
-
-
 
 
 
@@ -108,6 +106,15 @@ get_Blank_CSV <- function(){
   
   return(df)
   
+}
+
+get_UpdateCsv <- function(csv,website,username,comments,password){
+  
+  new_row <- data.frame(Website = website, Username = username, Comments = comments, Password = password)
+  
+  df <- rbind(csv, new_row)
+  
+  return(df)
 }
 
 

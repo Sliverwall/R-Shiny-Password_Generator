@@ -1,6 +1,8 @@
 #----------SERVER----------------
 server <- function(input, output, session) {
   
+  
+  #------------CSVs------------------------
   rawData <- reactive({
     
     # Reactive object for imported CSV
@@ -22,6 +24,8 @@ server <- function(input, output, session) {
     
   })
   
+  
+  #------------Password Generator------------------
   password_source <- reactive({
     
     # Use selected combo boxes to form string with all possible characters
@@ -60,7 +64,13 @@ server <- function(input, output, session) {
     }
   })
   
+  # Set blank csv
+  updatedData <- reactive({
+    
+    get_Blank_CSV()
+  })
   
+  #---------------Observers-----------------
   # Set observe statements finding unique column names within imported csv file
   
   website_col_name <- reactive({
@@ -101,8 +111,30 @@ server <- function(input, output, session) {
   observe({
   updateTextInput(session, "password_cite", value = password_made())
   })
-    
+  
+  
+  # Observe updating file
+  
+  # Function to save the data frame to a CSV file
+  observeEvent(input$writeButton, {
+    # Set variables for inputted request
+    website <- input$website_cite
+    username <- input$username_cite
+    comments <- input$comment_cite
+    password <- input$password_cite
+    appenededData <- reactiveVal(get_UpdateCsv(rawData(), website, username, comments, password))
 
+    csvName <- paste0(input$fileNameSelect, ".csv")
+    filePathSelect <- input$filePathSelect
+    
+    file = paste0(filePathSelect, "\\", csvName)
+    write.csv(appenededData(), file, row.names = FALSE)
+  })
+
+  
+  
+  
+  #--------------gitHub Table-----------------
   # Define commit_info as a reactive object
   commit_info <- reactive({
     get_Github_Commits(owner, repo, github_token)
