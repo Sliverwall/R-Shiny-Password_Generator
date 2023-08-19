@@ -59,8 +59,8 @@ server <- function(input, output, session) {
     return(result)
     
     } else {
-      # return password123 in case no parameters are set
-      "password123"
+      # return empty string in case no parameters are set
+      ""
     }
   })
   
